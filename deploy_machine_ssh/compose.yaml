@@ -1,0 +1,20 @@
+services:
+  alpine-ssh:
+    image: ncostin/alpine-ssh
+    ports:
+     - "5000:22"
+    
+  debian-ssh:
+    image: ncostin/debian-ssh
+    ports:
+     - "5001:22"
+  
+  mint-ssh:
+    image: ncostin/mint-ssh
+    ports:
+     - "5002:22"
+    
+  ubuntu-ssh:
+    image: ncostin/ubuntu-ssh
+    ports:
+     - "5003:22"

@@ -1,0 +1,8 @@
+---
+- name: Basic-tests
+  hosts: debian_based, other_based
+
+  tasks:
+   - name: Test connection
+     ansible.builtin.ping:
+      
