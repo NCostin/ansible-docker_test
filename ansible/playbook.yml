@@ -1,8 +1,65 @@
 ---
-- name: Basic-tests
-  hosts: debian_based, other_based
+- name: Some packages
+  hosts: debian_based
 
   tasks:
-   - name: Test connection
-     ansible.builtin.ping:
-      
+   - name: System update
+     become: true
+     ansible.builtin.apt:
+        update_cache: true
+   
+   - name: Install basic packages
+     become: true
+     ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+     with_items:
+        - sudo
+        - vim
+        - bash
+        - systemd
+        - coreutils
+        
+        
+   - name: Install basic software
+     become: true
+     ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+     with_items:
+        - ansible
+        - docker.io
+        - git
+        
+             	
+   - name: Check if python is installed
+     ansible.builtin.command: python3 --version
+     register: python_check
+     changed_when: false
+     ignore_errors: true
+     
+   - name: Install python
+     ansible.builtin.apt:
+        name: python3
+        state: present
+        
+   - name: Install pip
+     ansible.builtin.apt:
+        name: pip
+        state: present
+        
+   - name: Install venv
+     ansible.builtin.apt:
+        name: python3-venv
+        state: present
+   
+   - name: Create and activate venv
+     command: python3 -m venv ./venv && source venv/bin/activate
+  
+   - name: Install python libraries
+     become: true
+     ansible.builtin.pip:
+        name: "{{ item }}"
+        state: present
+     with_items:
+        - pillow
