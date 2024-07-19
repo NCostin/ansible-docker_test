@@ -48,18 +48,28 @@
         name: pip
         state: present
         
-   - name: Install venv
-     ansible.builtin.apt:
-        name: python3-venv
-        state: present
-   
-   - name: Create and activate venv
-     command: python3 -m venv ./venv && source venv/bin/activate
-  
    - name: Install python libraries
      become: true
      ansible.builtin.pip:
+        break_system_packages: true
+        name: "{{ item }}"
+     with_items:
+        - bottle
+        - pygame
+        - poetry
+        - requests
+        
+        
+   - name: Install network analysis tools
+     ansible.builtin.apt:
         name: "{{ item }}"
         state: present
      with_items:
-        - pillow
+        - wireshark-qt
+        - nmap
+        - iperf3
+     when:
+        - ansible_facts['distribution'] == "Debian"
+        
+        
+        
